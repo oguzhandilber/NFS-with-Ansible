@@ -20,7 +20,7 @@
        owner=root
       tags: mount-client
 
-    - name: update fstab and mount
+    - name: mount to path
       mount:
        path={{ nfs_mountpoint }}
        src={{ nfs_server }}:/{{ nfs_export }}
