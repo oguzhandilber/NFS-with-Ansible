@@ -1,0 +1,29 @@
+---
+- hosts: all
+  become: yes
+
+  vars:
+    nfs_mountpoint: '/nfsdata'
+    nfs_server: '192.168.1.112'
+    nfs_export: '/opt/nfsdata'
+
+  tasks:
+    - name: install nfs
+      apt: name=nfs-common state=latest
+      tags: client-nfs-install 
+
+    - name: create a mount point for nfs
+      file:
+       path={{ nfs_mountpoint }}
+       state=directory
+       mode=755
+       owner=root
+      tags: mount-client
+
+    - name: update fstab and mount
+      mount:
+       path={{ nfs_mountpoint }}
+       src={{ nfs_server }}:/{{ nfs_export }}
+       fstype=nfs
+       state=mounted
+      tags: mount-client
